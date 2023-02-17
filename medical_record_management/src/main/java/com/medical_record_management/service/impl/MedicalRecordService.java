@@ -15,6 +15,7 @@ public class MedicalRecordService implements IMedicalRecordService {
 
     @Autowired
     private IMedicalRecordRepository medicalRecordRepository;
+
     @Override
     public List<MedicalRecord> showList() {
         return medicalRecordRepository.showList();
@@ -33,6 +34,11 @@ public class MedicalRecordService implements IMedicalRecordService {
     @Override
     public MedicalRecord findMedicalRecord(Integer id) {
         return medicalRecordRepository.findMedicalRecord(id);
+    }
+
+    @Override
+    public void updateMedicalRecord(String startDay, String endDay, String reason, String treatmentOption, String doctor, Integer id) {
+        medicalRecordRepository.updateMedicalRecord(startDay, endDay, reason, treatmentOption, doctor, id);
     }
 
 

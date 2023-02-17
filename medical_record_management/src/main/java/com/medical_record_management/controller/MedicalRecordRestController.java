@@ -33,36 +33,46 @@ public class MedicalRecordRestController {
     }
 
     @DeleteMapping("/list/{id}")
-    private ResponseEntity<?> delete(@PathVariable("id") Integer id){
-        try{
+    private ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        try {
             medicalRecordService.deleteMedicalRecord(id);
             return new ResponseEntity<>(HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/patient")
-    private ResponseEntity<List<Patient>> listPatient(){
+    private ResponseEntity<List<Patient>> listPatient() {
         List<Patient> patientList = patientService.getAll();
-        if (patientList.isEmpty()){
+        if (patientList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(patientList, HttpStatus.OK);
     }
 
     @PostMapping("")
-    private ResponseEntity<?> add(@RequestBody MedicalRecord medicalRecord){
+    private ResponseEntity<?> add(@RequestBody MedicalRecord medicalRecord) {
 
         try {
             medicalRecordService.add(medicalRecord.getCode(), medicalRecord.getStartDay(), medicalRecord.getEndDay(), medicalRecord.getReason(), medicalRecord.getTreatmentOption(), medicalRecord.getDoctor(), medicalRecord.getPatient().getId());
             return new ResponseEntity<>(HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    private ResponseEntity<>
+    @GetMapping("/detail/{id}")
+    private ResponseEntity<MedicalRecord> detail(@PathVariable("id") Integer id) {
+        MedicalRecord medicalRecord = medicalRecordService.findMedicalRecord(id);
+        return new ResponseEntity<>(medicalRecord, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    private ResponseEntity<?> update(@RequestBody MedicalRecord medicalRecord) {
+        medicalRecordService.updateMedicalRecord(medicalRecord.getStartDay(), medicalRecord.getEndDay(), medicalRecord.getReason(), medicalRecord.getTreatmentOption(), medicalRecord.getDoctor(), medicalRecord.getId());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 }

@@ -13,5 +13,7 @@ public interface IMedicalRecordService {
 
     void add(String code, String startDay, String endDay, String reason, String treatmentOption, String doctor, Integer patientId);
 
-    MedicalRecord findMedicalRecord (Integer id);
+    MedicalRecord findMedicalRecord(Integer id);
+
+    void updateMedicalRecord(String startDay, String endDay, String reason, String treatmentOption, String doctor, Integer id);
 }

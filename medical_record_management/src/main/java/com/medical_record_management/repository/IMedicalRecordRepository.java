@@ -23,8 +23,12 @@ public interface IMedicalRecordRepository extends JpaRepository<MedicalRecord, I
     @Query(value = "insert into medical_record(code, start_day, end_day, reason, treatment_option, doctor, patient_id) value(:code, :startDay, :endDay, :reason, :treatmentOption, :doctor, :patientId)", nativeQuery = true)
     void add(@Param("code") String code, @Param("startDay") String startDay, @Param("endDay") String endDay, @Param("reason") String reason, @Param("treatmentOption") String treatmentOption, @Param("doctor") String doctor, @Param("patientId") Integer patientId);
 
+
+    @Query(value = "select * from medical_record where id = :id", nativeQuery = true)
+    MedicalRecord findMedicalRecord(@Param("id") Integer id);
+
     @Modifying
     @Transactional
-    @Query(value = "select * from medical_record where id = :id", nativeQuery = true)
-    MedicalRecord findMedicalRecord (@Param("id") Integer id);
+    @Query(value = "update medical_record set start_day = :startDay, end_day = :endDay, reason = :reason, treatment_option = :treatmentOption, doctor = :doctor where id = :id", nativeQuery = true)
+    void updateMedicalRecord(@Param("startDay") String startDay, @Param("endDay") String endDay, @Param("reason") String reason, @Param("treatmentOption") String treatmentOption, @Param("doctor") String doctor, @Param("id") Integer id);
 }

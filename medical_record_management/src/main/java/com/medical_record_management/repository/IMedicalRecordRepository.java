@@ -31,4 +31,7 @@ public interface IMedicalRecordRepository extends JpaRepository<MedicalRecord, I
     @Transactional
     @Query(value = "update medical_record set start_day = :startDay, end_day = :endDay, reason = :reason, treatment_option = :treatmentOption, doctor = :doctor where id = :id", nativeQuery = true)
     void updateMedicalRecord(@Param("startDay") String startDay, @Param("endDay") String endDay, @Param("reason") String reason, @Param("treatmentOption") String treatmentOption, @Param("doctor") String doctor, @Param("id") Integer id);
+
+    @Query(value = "select * from medical_record where reason like concat('%', :reason, '%')", nativeQuery = true)
+    List<MedicalRecord> searchReason(@Param("reason") String reason);
 }

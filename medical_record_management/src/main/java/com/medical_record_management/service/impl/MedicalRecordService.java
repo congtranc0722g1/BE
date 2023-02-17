@@ -41,5 +41,10 @@ public class MedicalRecordService implements IMedicalRecordService {
         medicalRecordRepository.updateMedicalRecord(startDay, endDay, reason, treatmentOption, doctor, id);
     }
 
+    @Override
+    public List<MedicalRecord> searchReason(String reason) {
+        return medicalRecordRepository.searchReason(reason);
+    }
+
 
 }

@@ -75,4 +75,14 @@ public class MedicalRecordRestController {
     }
 
 
+    @GetMapping("/search")
+    private ResponseEntity<List<MedicalRecord>>searchReason(@RequestParam("reason") String reason){
+        List<MedicalRecord> medicalRecordList = medicalRecordService.searchReason(reason);
+        if (medicalRecordList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(medicalRecordList, HttpStatus.OK);
+    }
+
+
 }

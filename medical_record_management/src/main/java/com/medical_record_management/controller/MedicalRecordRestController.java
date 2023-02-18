@@ -6,6 +6,10 @@ import com.medical_record_management.model.Patient;
 import com.medical_record_management.service.IMedicalRecordService;
 import com.medical_record_management.service.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +28,8 @@ public class MedicalRecordRestController {
     private IPatientService patientService;
 
     @GetMapping("/list")
-    private ResponseEntity<List<MedicalRecord>> showList() {
-        List<MedicalRecord> medicalRecordListDtoList = medicalRecordService.showList();
+    private ResponseEntity<Page<MedicalRecord>> showList(@PageableDefault(size = 3) Pageable pageable) {
+        Page<MedicalRecord> medicalRecordListDtoList = medicalRecordService.showList(pageable);
         if (medicalRecordListDtoList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -76,7 +80,7 @@ public class MedicalRecordRestController {
 
 
     @GetMapping("/search")
-    private ResponseEntity<List<MedicalRecord>>searchReason(@RequestParam("reason") String reason){
+    private ResponseEntity<List<MedicalRecord>>searchReason(@RequestBody String reason){
         List<MedicalRecord> medicalRecordList = medicalRecordService.searchReason(reason);
         if (medicalRecordList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

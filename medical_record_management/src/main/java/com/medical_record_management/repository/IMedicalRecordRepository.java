@@ -1,6 +1,8 @@
 package com.medical_record_management.repository;
 
 import com.medical_record_management.model.MedicalRecord;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +13,7 @@ import java.util.List;
 
 public interface IMedicalRecordRepository extends JpaRepository<MedicalRecord, Integer> {
     @Query(value = "select * from medical_record", nativeQuery = true)
-    List<MedicalRecord> showList();
+    Page<MedicalRecord> showList(Pageable pageable);
 
     @Modifying
     @Transactional

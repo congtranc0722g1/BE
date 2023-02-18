@@ -5,6 +5,8 @@ import com.medical_record_management.model.MedicalRecord;
 import com.medical_record_management.repository.IMedicalRecordRepository;
 import com.medical_record_management.service.IMedicalRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +19,8 @@ public class MedicalRecordService implements IMedicalRecordService {
     private IMedicalRecordRepository medicalRecordRepository;
 
     @Override
-    public List<MedicalRecord> showList() {
-        return medicalRecordRepository.showList();
+    public Page<MedicalRecord> showList(Pageable pageable) {
+        return medicalRecordRepository.showList(pageable);
     }
 
     @Override

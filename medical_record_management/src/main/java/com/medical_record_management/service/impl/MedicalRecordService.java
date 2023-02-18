@@ -44,8 +44,8 @@ public class MedicalRecordService implements IMedicalRecordService {
     }
 
     @Override
-    public List<MedicalRecord> searchReason(String reason) {
-        return medicalRecordRepository.searchReason(reason);
+    public Page<MedicalRecord> searchReason(String reason, Pageable pageable) {
+        return medicalRecordRepository.searchReason(reason, pageable);
     }
 
 

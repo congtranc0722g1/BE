@@ -1,10 +1,12 @@
 package com.medical_record_management.controller;
 
 import com.medical_record_management.dto.IMedicalRecordListDto;
+import com.medical_record_management.dto.MedicalRecordDto;
 import com.medical_record_management.model.MedicalRecord;
 import com.medical_record_management.model.Patient;
 import com.medical_record_management.service.IMedicalRecordService;
 import com.medical_record_management.service.IPatientService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,8 @@ import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,14 +60,16 @@ public class MedicalRecordRestController {
     }
 
     @PostMapping("")
-    private ResponseEntity<?> add(@RequestBody MedicalRecord medicalRecord) {
+    private ResponseEntity<?> add(@RequestBody @Validated MedicalRecordDto medicalRecordDto, BindingResult bindingResult) {
 
-        try {
+        new MedicalRecordDto().validate(medicalRecordDto, bindingResult);
+        if (bindingResult.hasErrors()){
+            return null;
+        }
+        MedicalRecord medicalRecord = new MedicalRecord();
+        BeanUtils.copyProperties(medicalRecordDto, medicalRecord);
             medicalRecordService.add(medicalRecord.getCode(), medicalRecord.getStartDay(), medicalRecord.getEndDay(), medicalRecord.getReason(), medicalRecord.getTreatmentOption(), medicalRecord.getDoctor(), medicalRecord.getPatient().getId());
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 
     @GetMapping("/detail/{id}")
@@ -79,9 +85,9 @@ public class MedicalRecordRestController {
     }
 
 
-    @GetMapping("/search")
-    private ResponseEntity<List<MedicalRecord>>searchReason(@RequestBody String reason){
-        List<MedicalRecord> medicalRecordList = medicalRecordService.searchReason(reason);
+    @GetMapping("/search/{reason}")
+    private ResponseEntity<Page<MedicalRecord>>searchReason(@PathVariable("reason") String reason, @PageableDefault(size = 3) Pageable pageable){
+        Page<MedicalRecord> medicalRecordList = medicalRecordService.searchReason(reason, pageable);
         if (medicalRecordList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

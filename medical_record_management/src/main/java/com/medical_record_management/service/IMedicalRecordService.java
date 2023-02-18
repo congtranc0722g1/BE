@@ -19,5 +19,5 @@ public interface IMedicalRecordService {
 
     void updateMedicalRecord(String startDay, String endDay, String reason, String treatmentOption, String doctor, Integer id);
 
-    List<MedicalRecord> searchReason(@Param("reason") String reason);
+    Page<MedicalRecord> searchReason(String reason, Pageable pageable);
 }

@@ -35,5 +35,5 @@ public interface IMedicalRecordRepository extends JpaRepository<MedicalRecord, I
     void updateMedicalRecord(@Param("startDay") String startDay, @Param("endDay") String endDay, @Param("reason") String reason, @Param("treatmentOption") String treatmentOption, @Param("doctor") String doctor, @Param("id") Integer id);
 
     @Query(value = "select * from medical_record where reason like concat('%', :reason, '%')", nativeQuery = true)
-    List<MedicalRecord> searchReason(@Param("reason") String reason);
+    Page<MedicalRecord> searchReason(@Param("reason") String reason, Pageable pageable);
 }

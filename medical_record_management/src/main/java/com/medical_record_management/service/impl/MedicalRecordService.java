@@ -19,8 +19,13 @@ public class MedicalRecordService implements IMedicalRecordService {
     private IMedicalRecordRepository medicalRecordRepository;
 
     @Override
-    public Page<MedicalRecord> showList(Pageable pageable) {
-        return medicalRecordRepository.showList(pageable);
+    public Page<MedicalRecord> showList(String reason, String name, Pageable pageable) {
+        return medicalRecordRepository.showList(reason, name, pageable);
+    }
+
+    @Override
+    public Page<MedicalRecord> findAll(Pageable pageable) {
+        return medicalRecordRepository.findAll(pageable);
     }
 
     @Override
@@ -44,8 +49,8 @@ public class MedicalRecordService implements IMedicalRecordService {
     }
 
     @Override
-    public Page<MedicalRecord> searchReason(String reason, Pageable pageable) {
-        return medicalRecordRepository.searchReason(reason, pageable);
+    public List<MedicalRecord> searchReason(String reason) {
+        return medicalRecordRepository.searchReason(reason);
     }
 
 

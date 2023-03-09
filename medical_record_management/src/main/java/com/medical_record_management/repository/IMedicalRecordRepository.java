@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface IMedicalRecordRepository extends JpaRepository<MedicalRecord, Integer> {
-    @Query(value = "select * from medical_record", nativeQuery = true)
-    Page<MedicalRecord> showList(Pageable pageable);
+    @Query(value = "select m.* from `medical_record` m join `patient` p on m.patient_id = p.id where m.reason like concat('%', :reason, '%') and p.name like concat('%', :name, '%')", nativeQuery = true)
+    Page<MedicalRecord> showList(@Param("reason") String reason, @Param("name") String name, Pageable pageable);
 
     @Modifying
     @Transactional
@@ -35,5 +35,5 @@ public interface IMedicalRecordRepository extends JpaRepository<MedicalRecord, I
     void updateMedicalRecord(@Param("startDay") String startDay, @Param("endDay") String endDay, @Param("reason") String reason, @Param("treatmentOption") String treatmentOption, @Param("doctor") String doctor, @Param("id") Integer id);
 
     @Query(value = "select * from medical_record where reason like concat('%', :reason, '%')", nativeQuery = true)
-    Page<MedicalRecord> searchReason(@Param("reason") String reason, Pageable pageable);
+    List<MedicalRecord> searchReason(@Param("reason") String reason);
 }

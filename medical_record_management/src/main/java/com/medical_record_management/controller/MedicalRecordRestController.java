@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("")
@@ -32,11 +33,8 @@ public class MedicalRecordRestController {
     private IPatientService patientService;
 
     @GetMapping("/list")
-    private ResponseEntity<Page<MedicalRecord>> showList(@PageableDefault(size = 3) Pageable pageable) {
-        Page<MedicalRecord> medicalRecordListDtoList = medicalRecordService.showList(pageable);
-        if (medicalRecordListDtoList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    private ResponseEntity<Page<MedicalRecord>> showList(@RequestParam(value = "reason", defaultValue = "") String reason, @RequestParam(value = "name", defaultValue = "") String name, @PageableDefault(size = 3) Pageable pageable) {
+        Page<MedicalRecord> medicalRecordListDtoList = medicalRecordService.showList(reason, name, pageable);
         return new ResponseEntity<>(medicalRecordListDtoList, HttpStatus.OK);
     }
 
@@ -63,13 +61,13 @@ public class MedicalRecordRestController {
     private ResponseEntity<?> add(@RequestBody @Validated MedicalRecordDto medicalRecordDto, BindingResult bindingResult) {
 
         new MedicalRecordDto().validate(medicalRecordDto, bindingResult);
-        if (bindingResult.hasErrors()){
-            return null;
+        if (bindingResult.hasErrors()) {
+//            return new ResponseEntity<>();
         }
         MedicalRecord medicalRecord = new MedicalRecord();
         BeanUtils.copyProperties(medicalRecordDto, medicalRecord);
-            medicalRecordService.add(medicalRecord.getCode(), medicalRecord.getStartDay(), medicalRecord.getEndDay(), medicalRecord.getReason(), medicalRecord.getTreatmentOption(), medicalRecord.getDoctor(), medicalRecord.getPatient().getId());
-            return new ResponseEntity<>(HttpStatus.OK);
+        medicalRecordService.add(medicalRecord.getCode(), medicalRecord.getStartDay(), medicalRecord.getEndDay(), medicalRecord.getReason(), medicalRecord.getTreatmentOption(), medicalRecord.getDoctor(), medicalRecord.getPatient().getId());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/detail/{id}")
@@ -86,8 +84,8 @@ public class MedicalRecordRestController {
 
 
     @GetMapping("/search/{reason}")
-    private ResponseEntity<Page<MedicalRecord>>searchReason(@PathVariable("reason") String reason, @PageableDefault(size = 3) Pageable pageable){
-        Page<MedicalRecord> medicalRecordList = medicalRecordService.searchReason(reason, pageable);
+    private ResponseEntity<List<MedicalRecord>> searchReason(@PathVariable("reason") String reason) {
+        List<MedicalRecord> medicalRecordList = medicalRecordService.searchReason(reason);
         if (medicalRecordList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

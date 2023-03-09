@@ -8,7 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface IMedicalRecordService {
-    Page<MedicalRecord> showList(Pageable pageable);
+    Page<MedicalRecord> showList(String reason, String name, Pageable pageable);
+   Page<MedicalRecord> findAll(Pageable pageable);
 
     void deleteMedicalRecord(Integer id);
 
@@ -19,5 +20,5 @@ public interface IMedicalRecordService {
 
     void updateMedicalRecord(String startDay, String endDay, String reason, String treatmentOption, String doctor, Integer id);
 
-    Page<MedicalRecord> searchReason(String reason, Pageable pageable);
+    List<MedicalRecord> searchReason(String reason);
 }

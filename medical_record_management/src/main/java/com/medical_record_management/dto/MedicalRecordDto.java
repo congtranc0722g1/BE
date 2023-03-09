@@ -13,17 +13,23 @@ public class MedicalRecordDto implements Validator {
 
     private int id;
 
+    @Pattern(regexp = "^BA-[0-9]{3}$", message = "Code nhập không đúng định dạng")
+    @NotBlank(message = "không được để trống")
     private String code;
 
+    @NotBlank(message = "không được để trống")
     private String startDay;
 
+    @NotBlank(message = "không được để trống")
     private String endDay;
 
     @NotBlank(message = "không được để trống")
     private String reason;
 
+    @NotBlank(message = "không được để trống")
     private String treatmentOption;
 
+    @NotBlank(message = "không được để trống")
     private String doctor;
 
     private Patient patient;
